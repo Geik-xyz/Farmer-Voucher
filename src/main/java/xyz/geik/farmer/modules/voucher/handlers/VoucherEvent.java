@@ -105,7 +105,7 @@ public class VoucherEvent implements Listener {
     @EventHandler
     public void onFarmerRemoveEvent(FarmerRemoveEvent event) {
         if (Voucher.getInstance().getConfigFile().isGiveVoucherWhenRemove()) {
-            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(event.getFarmer().getOwnerUUID());
+            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(event.getOwnerUUID());
             if (offlinePlayer.isOnline()) {
                 Player player = offlinePlayer.getPlayer();
                 int level = FarmerLevel.getAllLevels().indexOf(event.getFarmer().getLevel())+1;
