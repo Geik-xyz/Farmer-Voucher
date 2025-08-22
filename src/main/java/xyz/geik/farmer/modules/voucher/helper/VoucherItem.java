@@ -10,6 +10,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
 import xyz.geik.farmer.modules.voucher.Voucher;
 import xyz.geik.farmer.shades.nbtapi.NBT;
+import xyz.geik.glib.chat.ChatUtils;
 import xyz.geik.glib.shades.xseries.XMaterial;
 import xyz.geik.glib.shades.xseries.profiles.builder.XSkull;
 import xyz.geik.glib.shades.xseries.profiles.objects.Profileable;
@@ -91,10 +92,12 @@ public class VoucherItem {
 
         ItemMeta meta = result.getItemMeta();
         if (Voucher.getInstance().getLang().contains(path + ".lore"))
-            meta.setLore(Voucher.getInstance().getLang().getTextList(path + ".lore"));
-        meta.setDisplayName(Voucher.getInstance().getLang().getText(path + ".name"));
+            meta.setLore(Voucher.getInstance().getLang().getStringList(path + ".lore").stream()
+                    .map(ChatUtils::color).collect(Collectors.toList()));
+        meta.setDisplayName(ChatUtils.color(Voucher.getInstance().getLang().getString(path + ".name")));
         if (Voucher.getInstance().getLang().getBoolean(path + ".glow")) {
-            if (Bukkit.getVersion().contains("1.21.") || Bukkit.getVersion().contains("1.20.6") || Bukkit.getVersion().contains("1.20.5") ) {
+            if (Bukkit.getVersion().contains("1.22") || Bukkit.getVersion().contains("1.23") || Bukkit.getVersion().contains("1.24") ||
+                    Bukkit.getVersion().contains("1.21") || Bukkit.getVersion().contains("1.20.6") || Bukkit.getVersion().contains("1.20.5") ) {
                 meta.addEnchant(Enchantment.SHARPNESS, 1, true);
             }
             else {
@@ -105,7 +108,4 @@ public class VoucherItem {
         result.setItemMeta(meta);
         return result;
     }
-
-
-
 }

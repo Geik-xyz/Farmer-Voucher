@@ -39,28 +39,28 @@ public class VoucherCommand extends BaseCommand {
             return;
         }
         if (!Voucher.getInstance().isEnabled()) {
-            sender.sendMessage(Voucher.getInstance().getLang().getText("voucherDisabled"));
+            ChatUtils.sendMessage(sender, Voucher.getInstance().getLang().getString("voucherDisabled"));
             return;
         }
         if (Bukkit.getPlayer(target) == null || !Bukkit.getPlayer(target).isOnline()) {
-            sender.sendMessage(Voucher.getInstance().getLang().getText("playerNotFound"));
+            ChatUtils.sendMessage(sender, Voucher.getInstance().getLang().getString("playerNotFound"));
             return;
         }
         if (!isNumeric(amount)) {
-            sender.sendMessage(Voucher.getInstance().getLang().getText("notNumber"));
+            ChatUtils.sendMessage(sender, Voucher.getInstance().getLang().getString("notNumber"));
             return;
         }
         if (Integer.parseInt(amount) > FarmerLevel.getAllLevels().size()) {
-            sender.sendMessage(Voucher.getInstance().getLang().getText("enterValidLevel"));
+            ChatUtils.sendMessage(sender, Voucher.getInstance().getLang().getString("enterValidLevel"));
             return;
         }
         int level = Integer.parseInt(amount);
         Player player = Bukkit.getPlayer(target);
         player.getInventory().addItem(VoucherItem.getVoucherItem(level));
-        sender.sendMessage(Voucher.getInstance().getLang().getText("voucherGiven")
+        ChatUtils.sendMessage(sender, Voucher.getInstance().getLang().getString("voucherGiven")
                 .replace("%player%", target)
                 .replace("%level%", amount));
-        player.sendMessage(Voucher.getInstance().getLang().getText("voucherReceived")
+        ChatUtils.sendMessage(player, Voucher.getInstance().getLang().getString("voucherReceived")
                 .replace("%level%", amount));
     }
 

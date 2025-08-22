@@ -58,7 +58,7 @@ public class VoucherEvent implements Listener {
             return;
         event.setCancelled(true);
         if (!WorldHelper.isFarmerAllowed(player.getWorld().getName())) {
-            player.sendMessage(Voucher.getInstance().getLang().getText("wrongWorld"));
+            ChatUtils.sendMessage(player, Voucher.getInstance().getLang().getString("wrongWorld"));
             return;
         }
         if (!Main.getIntegration().getOwnerUUID(player.getLocation()).equals(player.getUniqueId())) {
@@ -71,15 +71,15 @@ public class VoucherEvent implements Listener {
                     Farmer farmer = FarmerManager.getFarmers().get(Main.getIntegration().getRegionID(player.getLocation()));
                     if ((voucherLevel - 1) > FarmerLevel.getAllLevels().indexOf(farmer.getLevel())) {
                         farmer.setLevel(FarmerLevel.getAllLevels().get(voucherLevel - 1));
-                        player.sendMessage(Voucher.getInstance().getLang().getText("changedLevel")
+                        ChatUtils.sendMessage(player, Voucher.getInstance().getLang().getString("changedLevel")
                                 .replace("%level%", voucherLevel + ""));
                         XSound.ENTITY_PLAYER_LEVELUP.play(player);
                         descentVoucher(player, event.getItem());
                         return;
                     } else
-                        player.sendMessage(Voucher.getInstance().getLang().getText("levelHigher"));
+                        ChatUtils.sendMessage(player, Voucher.getInstance().getLang().getString("levelHigher"));
                 } else
-                    player.sendMessage(Voucher.getInstance().getLang().getText("alreadyHaveFarmer"));
+                    ChatUtils.sendMessage(player, Voucher.getInstance().getLang().getString("alreadyHaveFarmer"));
                 return;
             }
         }
@@ -110,7 +110,7 @@ public class VoucherEvent implements Listener {
                 Player player = offlinePlayer.getPlayer();
                 int level = FarmerLevel.getAllLevels().indexOf(event.getFarmer().getLevel())+1;
                 player.getInventory().addItem(VoucherItem.getVoucherItem(level));
-                player.sendMessage(Voucher.getInstance().getLang().getText("voucherReceived")
+                ChatUtils.sendMessage(player, Voucher.getInstance().getLang().getString("voucherReceived")
                         .replace("%level%", level+""));
             }
         }
