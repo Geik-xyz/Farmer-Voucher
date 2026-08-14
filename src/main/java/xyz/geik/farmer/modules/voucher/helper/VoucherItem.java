@@ -95,16 +95,16 @@ public class VoucherItem {
             meta.setLore(Voucher.getInstance().getLang().getStringList(path + ".lore").stream()
                     .map(ChatUtils::color).collect(Collectors.toList()));
         meta.setDisplayName(ChatUtils.color(Voucher.getInstance().getLang().getString(path + ".name")));
+        
         if (Voucher.getInstance().getLang().getBoolean(path + ".glow")) {
-            if (Bukkit.getVersion().contains("1.22") || Bukkit.getVersion().contains("1.23") || Bukkit.getVersion().contains("1.24") ||
-                    Bukkit.getVersion().contains("1.21") || Bukkit.getVersion().contains("1.20.6") || Bukkit.getVersion().contains("1.20.5") ) {
+            try {
                 meta.addEnchant(Enchantment.SHARPNESS, 1, true);
-            }
-            else {
+            } catch (Throwable e) {
                 meta.addEnchant(Enchantment.getByName("DAMAGE_ALL"), 1, true);
             }
             meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         }
+        
         result.setItemMeta(meta);
         return result;
     }
