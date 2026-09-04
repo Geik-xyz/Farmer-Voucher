@@ -21,12 +21,18 @@ import xyz.geik.farmer.shades.nbtapi.NBT;
 import xyz.geik.glib.chat.ChatUtils;
 import xyz.geik.glib.shades.xseries.XSound;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 /**
  * Voucher Event Listener class
  * @author poyraz
  * @since 1.0.0
  */
 public class VoucherEvent implements Listener {
+
+    private final Map<UUID, Long> cooldowns = new HashMap<>();
 
     /**
      * Constructor of class
@@ -45,6 +51,12 @@ public class VoucherEvent implements Listener {
         if (event.getItem().getItemMeta() == null)
             return;
         Player player = event.getPlayer();
+        long now = System.currentTimeMillis();
+        if (cooldowns.containsKey(player.getUniqueId()) && cooldowns.get(player.getUniqueId()) > now) {
+            event.setCancelled(true);
+            return;
+        }
+        cooldowns.put(player.getUniqueId(), now + 1000);
         int voucherLevel;
         try {
             voucherLevel = NBT.get(event.getItem(), voucher -> (voucher.getInteger("farmerLevel")));
@@ -61,7 +73,13 @@ public class VoucherEvent implements Listener {
             ChatUtils.sendMessage(player, Voucher.getInstance().getLang().getString("wrongWorld"));
             return;
         }
-        if (!Main.getIntegration().getOwnerUUID(player.getLocation()).equals(player.getUniqueId())) {
+        try {
+            if (!Main.getIntegration().getOwnerUUID(player.getLocation()).equals(player.getUniqueId())) {
+                ChatUtils.sendMessage(player, Main.getLangFile().getMessages().getNotOwner());
+                return;
+            }
+        }
+        catch (Exception e) {
             ChatUtils.sendMessage(player, Main.getLangFile().getMessages().getNotOwner());
             return;
         }
